@@ -1,6 +1,5 @@
 package Control;
 
-import Model.Observer.Message;
 import Model.Observer.User;
 import View.TextChannel;
 
@@ -22,12 +21,8 @@ public class MessageController implements ActionListener {
             /*
                 Test the observer pattern
              */
-            User newUser = new User("janedoe", this.textChannel);
-            Message message = new Message();
-            message.addClient(newUser);
-
             try {
-                message.sendMessage(
+                textChannel.getMessage().sendMessage(
                         textChannel.getMessageField()); // Get the users
             } catch (BadLocationException ex) {
                 throw new RuntimeException(ex);

@@ -1,6 +1,8 @@
 package View;
 
 import Control.MessageController;
+import Model.Observer.Message;
+import Model.Observer.User;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -15,7 +17,6 @@ import javax.swing.text.BadLocationException;
 
 import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
 import java.awt.Color;
 import java.awt.Dimension;
 
@@ -36,11 +37,28 @@ public class TextChannel extends JFrame {
 
     public JButton sendButton;
 
-    public TextChannel() {
+    public User getUser() {
+        return user;
+    }
+
+    User user;
+
+    public Message getMessage() {
+        return message;
+    }
+
+    Message message;
+
+    public TextChannel(String username) {
 
         super("¬WhatsApp");
+        // Create the user and message objects here so that the user is not
+        // created on each button send
+        this.user = new User(username, this);
+        message = new Message();
+        message.addClient(getUser());
+
         MessageController messageController = new MessageController(this);
-        StyleContext context = new StyleContext();
         JPanel chatPanel = new JPanel();
 
         GroupLayout layout = new GroupLayout(chatPanel);
@@ -89,7 +107,7 @@ public class TextChannel extends JFrame {
 
     }
 
-    public void addMessage(String username, String message, Color color)
+    public void addMessage(String message, Color color)
     throws BadLocationException {
         Style usernameStyle =
                 messageArea.getStyledDocument().addStyle("usernameStyle", null);
@@ -98,10 +116,10 @@ public class TextChannel extends JFrame {
                 messageArea.getStyledDocument().addStyle("messageStyle", null);
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
-                                 username + ": ", usernameStyle);
+                                 user.getUsername() + ": ", usernameStyle);
         messageArea.getDocument()
-                   .insertString(messageArea.getDocument().getLength(), message,
-                                 messageStyle);
+                   .insertString(messageArea.getDocument().getLength(),
+                                 message + "\n", messageStyle);
 
     }
 

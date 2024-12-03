@@ -25,7 +25,7 @@ public class Message {
 
     public void sendMessage(String message) throws BadLocationException {
         for (nwaClient user : users) {
-            user.receiveMessage(user.getUsername(), message);
+            user.receiveMessage(user.getUsername(), message, user.getColor());
         }
     }
 }

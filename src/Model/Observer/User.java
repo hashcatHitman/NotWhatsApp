@@ -41,11 +41,14 @@ public class User implements nwaClient {
 
         return new Color(r, g, b);
     }
+    public Color getColor() {
+        return this.color;
+    }
 
     @Override
-    public void receiveMessage(String username, String message)
+    public void receiveMessage(String username, String message, Color color)
     throws BadLocationException {
-        textChannel.addMessage(username, message, color);
+        textChannel.addMessage(message, color);
     }
 
 }

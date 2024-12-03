@@ -1,6 +1,7 @@
 package Model.Observer;
 
 import javax.swing.text.BadLocationException;
+import java.awt.Color;
 
 /**
  * Paige Grimes nwaClient.java (NotWhatsApp Client) The interface for the users
@@ -8,6 +9,8 @@ import javax.swing.text.BadLocationException;
 public interface nwaClient {
     String getUsername();
 
-    void receiveMessage(String username, String message)
+    Color getColor();
+
+    void receiveMessage(String username, String message, Color color)
     throws BadLocationException;
 }

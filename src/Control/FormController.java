@@ -2,6 +2,7 @@ package Control;
 
 import View.*;
 
+import javax.swing.JOptionPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,7 +19,10 @@ public class FormController implements ActionListener {
         if (e.getSource() == view.connectButton) {
             // Open the chat window
             view.setVisible(false);
-            TextChannel textChannel = new TextChannel();
+
+            String username = JOptionPane.showInputDialog("What is your name?");
+
+            TextChannel textChannel = new TextChannel(username);
             textChannel.setVisible(true);
         }
     }
