@@ -3,7 +3,6 @@ package Model.Crypto;
 import javax.crypto.KeyAgreement;
 import java.security.InvalidKeyException;
 import java.security.KeyPairGenerator;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 
@@ -11,9 +10,9 @@ import java.security.PublicKey;
  * <p>
  * A KeyManager acts as a facade that simplifies the process of generating a
  * shared secret for a symmetric Cipher using a public-key key agreement scheme.
- * KeyManagerAES128DH uses a 512-bit Diffie-Hellman key agreement to generate
- * a 512 bit shared secret, which we then use to determine a much smaller
- * shared secret suitable for use with a ShiftCipher.
+ * KeyManagerAES128DH uses a 512-bit Diffie-Hellman key agreement to generate a
+ * 512 bit shared secret, which we then use to determine a much smaller shared
+ * secret suitable for use with a ShiftCipher.
  * </p>
  *
  * @author Sam K
@@ -41,9 +40,9 @@ public class KeyManagerShiftDH extends KeyManager {
 
     /**
      * <p>
-     * Uses Diffie-Hellman to agree upon a 512-bit shared secret, then uses
-     * some modular arithmetic to make it a shared secret suitable for use
-     * with a ShiftCipher.
+     * Uses Diffie-Hellman to agree upon a 512-bit shared secret, then uses some
+     * modular arithmetic to make it a shared secret suitable for use with a
+     * ShiftCipher.
      * </p>
      *
      * @param secondPartyPublicKey The other KeyManager's PublicKey.
