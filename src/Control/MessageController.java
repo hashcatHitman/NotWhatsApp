@@ -1,6 +1,5 @@
 package Control;
 
-import Model.Observer.User;
 import View.TextChannel;
 
 import javax.swing.text.BadLocationException;
@@ -27,6 +26,7 @@ public class MessageController implements ActionListener {
             } catch (BadLocationException ex) {
                 throw new RuntimeException(ex);
             }
+            textChannel.setMessageField("");
 
         }
     }

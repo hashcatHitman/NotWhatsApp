@@ -1,6 +1,8 @@
 package Model.Observer;
-/*
- * Paige Grimes User.java The Observer
+/**
+ * User.java The Observer object (Users) that will receive notifications
+ *
+ * @author Paige
  */
 
 import View.TextChannel;
@@ -11,11 +13,20 @@ import java.util.Random;
 
 public class User implements nwaClient {
 
-    private String username;
+    private final String username;
 
-    TextChannel textChannel;
+    private final TextChannel textChannel;
 
-    Color color;
+    private final Color color;
+
+    /**
+     * Creates a User object and sets their username, the color their name will
+     * appear as, and sets the location to receive notifications as the chat
+     * windows JFame.
+     *
+     * @param username Sets the users' username
+     * @param textChannel Sets the location to receive notifications
+     */
 
     public User(String username, TextChannel textChannel) {
         this.username = username;
@@ -23,16 +34,22 @@ public class User implements nwaClient {
         this.textChannel = textChannel;
     }
 
+    /**
+     * Getters for the username and color so other classes can access them
+     */
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public Color getColor() {
+        return this.color;
     }
 
+    /**
+     * setColor() assigns the user a random color that will be assigned in the
+     * classes constructor then applied to their username in the GUI.
+     */
     public Color setColor() {
-        // Logic to get a random color
         Random rand = new Random();
 
         float r = (rand.nextFloat());
@@ -41,14 +58,19 @@ public class User implements nwaClient {
 
         return new Color(r, g, b);
     }
-    public Color getColor() {
-        return this.color;
-    }
 
+    /**
+     * receiveMessage() is called from the MessageNotification class then calls
+     * the textChannel's addMessage() method which will update the GUI with the
+     * user's username, assigned color, and their message.
+     *
+     * @throws BadLocationException Needed for handling style document styling
+     * exceptions in addMessage() in TextChannel
+     */
     @Override
     public void receiveMessage(String username, String message, Color color)
     throws BadLocationException {
-        textChannel.addMessage(message, color);
+        textChannel.addMessage(message, getColor());
     }
 
 }

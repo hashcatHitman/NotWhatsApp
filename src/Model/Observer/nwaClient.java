@@ -4,7 +4,10 @@ import javax.swing.text.BadLocationException;
 import java.awt.Color;
 
 /**
- * Paige Grimes nwaClient.java (NotWhatsApp Client) The interface for the users
+ * nwaClient.java (NotWhatsApp Client)
+ * The interface for the observer class.
+ *
+ * @author Paige Grimes
  */
 public interface nwaClient {
     String getUsername();

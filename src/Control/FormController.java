@@ -20,10 +20,22 @@ public class FormController implements ActionListener {
             // Open the chat window
             view.setVisible(false);
 
-            String username = JOptionPane.showInputDialog("What is your name?");
+            // Creates a popup window that asks the user for their desired
+            // username then saves that username to the String variable
+            // username.
+            String username = JOptionPane.showInputDialog("What would you " +
+                                                          "like your " +
+                                                          "username to be?");
+            // This is just a simple setup to create the chat window
+            if (!username.isEmpty()) {
+                TextChannel textChannel = new TextChannel(username);
+                textChannel.setVisible(true);
+            } else {
 
-            TextChannel textChannel = new TextChannel(username);
-            textChannel.setVisible(true);
+                JOptionPane.showMessageDialog(view, "Error: You did not enter" +
+                                                    " a username.");
+                view.setVisible(true);
+            }
         }
     }
 }

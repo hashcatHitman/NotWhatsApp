@@ -4,7 +4,7 @@ import Model.Crypto.Cipher;
 import Model.Crypto.KeyManagerAES128DH;
 import Model.Crypto.KeyManagerShiftDH;
 import Model.Crypto.ShiftCipher;
-import View.View;
+import View.ServerView;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
@@ -34,7 +34,7 @@ public class Main {
      */
     public static void main(String[] args)
     throws NoSuchAlgorithmException, InvalidKeyException {
-        new View();
+        new ServerView();
 
         /*
         Example Cipher usage.

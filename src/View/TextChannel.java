@@ -1,7 +1,7 @@
 package View;
 
 import Control.MessageController;
-import Model.Observer.Message;
+import Model.Observer.MessageNotification;
 import Model.Observer.User;
 
 import javax.swing.GroupLayout;
@@ -30,56 +30,72 @@ import java.awt.Dimension;
  * https://stackoverflow.com/questions/4246351/creating-random-colour-in-java
  */
 
+/**
+ * This class controls the GUI for the chat window.
+ *
+ * @author Paige G
+ * @author Sam K
+ * @author Ryan F
+ */
+
 public class TextChannel extends JFrame {
+    // Declare the components of the GUI
     JTextPane messageArea;
 
     JTextField messageField;
 
     public JButton sendButton;
 
-    public User getUser() {
-        return user;
-    }
+    MessageNotification messageNotification;
 
     User user;
 
-    public Message getMessage() {
-        return message;
-    }
-
-    Message message;
-
+    /**
+     * The constructor for the chat GUI. Creates the JFrame, adds and styles the
+     * components.
+     *
+     * @param username Pass in the username so the client will be subscribed
+     *                 to messages
+     */
     public TextChannel(String username) {
 
         super("¬WhatsApp");
-        // Create the user and message objects here so that the user is not
-        // created on each button send
-        this.user = new User(username, this);
-        message = new Message();
-        message.addClient(getUser());
 
+        /**
+         * Create the user and message objects here so that the user is not
+         * created on each button send.
+         */
+        this.user = new User(username, this);
+        messageNotification = new MessageNotification();
+        messageNotification.addClient(getUser());
+
+        // Create the MessageController that hold the button action listeners.
         MessageController messageController = new MessageController(this);
         JPanel chatPanel = new JPanel();
 
+        // Create a GroupLayout to organize the components.
         GroupLayout layout = new GroupLayout(chatPanel);
         chatPanel.setLayout(layout);
 
-        // Components
-        JLabel numUsers = new JLabel("Users: 1");
+        // Display the number of users online
+        JLabel numUsers =
+                new JLabel("Users: " + messageNotification.getNumUsers());
 
         messageArea = new JTextPane();
+
         // Add scroll pane for scrolling
         JScrollPane scrollPane = new JScrollPane(messageArea);
         messageArea.setEditable(false);
         messageArea.setPreferredSize(new Dimension(200, 200));
 
         messageField = new JTextField();
+        messageField.requestFocus();
         sendButton = new JButton("Send");
 
         layout.setAutoCreateGaps(true);
         layout.setAutoCreateContainerGaps(true);
 
-        // Define horizontal layout
+        // Define horizontal layout - both horizontal and vertical are required.
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                       .addComponent(numUsers).addComponent(scrollPane).addGroup(
@@ -96,7 +112,6 @@ public class TextChannel extends JFrame {
                                     .addComponent(messageField)
                                     .addComponent(sendButton)));
 
-        this.setVisible(false); // Close the other window
         // Finalize frame
         add(chatPanel);
         pack();
@@ -107,13 +122,24 @@ public class TextChannel extends JFrame {
 
     }
 
+    /**
+     * Adds the users' message to the JTextPane with styles
+     *
+     * @param message The users' message
+     * @param color The color of the users username
+     *
+     * @throws BadLocationException Needed for handling style document
+     * exceptions
+     */
     public void addMessage(String message, Color color)
     throws BadLocationException {
         Style usernameStyle =
                 messageArea.getStyledDocument().addStyle("usernameStyle", null);
+        // Add color to the username
         StyleConstants.setForeground(usernameStyle, color);
         Style messageStyle =
                 messageArea.getStyledDocument().addStyle("messageStyle", null);
+        // Add the username and message to the document (JTextPane)
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
                                  user.getUsername() + ": ", usernameStyle);
@@ -123,8 +149,23 @@ public class TextChannel extends JFrame {
 
     }
 
+    /**
+     * Getters and Setters
+     */
     public String getMessageField() {
         return messageField.getText();
+    }
+
+    public void setMessageField(String message) {
+        messageField.setText(message);
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public MessageNotification getMessage() {
+        return messageNotification;
     }
 
 }
