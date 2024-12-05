@@ -6,9 +6,27 @@ import javax.swing.*;
 import java.awt.Dimension;
 
 public class ServerView extends JFrame {
+    public static String getServerIP() {
+        return serverIP.getText();
+    }
+
+    public void setServerIP(JTextField serverIP) {
+        this.serverIP = serverIP;
+    }
+
+    public static String getServerPort() {
+        return serverPort.getText();
+    }
+
+    public void setServerPort(JTextField serverPort) {
+        ServerView.serverPort = serverPort;
+    }
+
     JLabel IPAddress, portAddress;
 
-    JTextField serverIP, serverPort;
+    static JTextField serverIP;
+
+    static JTextField serverPort;
 
     public JButton connectButton;
 

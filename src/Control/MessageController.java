@@ -1,6 +1,7 @@
 package Control;
 
-import Model.Observer.User;
+import Model.ConnectToClient;
+
 import View.TextChannel;
 
 import javax.swing.text.BadLocationException;
@@ -21,9 +22,12 @@ public class MessageController implements ActionListener {
             /*
                 Test the observer pattern
              */
+            String message = TextChannel.getMessageField();
             try {
-                textChannel.getMessage().sendMessage(
-                        textChannel.getMessageField()); // Get the users
+                ConnectToClient.sendMessage(message);
+                TextChannel.getMessage().sendMessage(
+                        TextChannel.getMessageField()); // Get the users
+                TextChannel.messageField.setText("");
             } catch (BadLocationException ex) {
                 throw new RuntimeException(ex);
             }
@@ -31,3 +35,4 @@ public class MessageController implements ActionListener {
         }
     }
 }
+

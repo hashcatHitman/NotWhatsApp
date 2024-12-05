@@ -19,6 +19,8 @@ import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * TODO: Move to Readme with explanations
@@ -33,25 +35,34 @@ import java.awt.Dimension;
 public class TextChannel extends JFrame {
     JTextPane messageArea;
 
-    JTextField messageField;
+    public static JTextField messageField;
 
     public JButton sendButton;
+    private static boolean windowClosed = false; // Custom flag
 
-    public User getUser() {
+    public static User getUser() {
         return user;
     }
 
-    User user;
+    static User user;
 
-    public Message getMessage() {
+    public static Message getMessage() {
         return message;
     }
 
-    Message message;
+    static Message message;
+
+    public static boolean isWindowClosed() {
+        return windowClosed;
+    }
+
+    public static void setWindowClosed(boolean windowClosed) {
+        TextChannel.windowClosed = windowClosed;
+    }
 
     public TextChannel(String username) {
 
-        super("¬WhatsApp");
+        super("Â¬WhatsApp");
         // Create the user and message objects here so that the user is not
         // created on each button send
         this.user = new User(username, this);
@@ -104,6 +115,13 @@ public class TextChannel extends JFrame {
         //  (to enter ip and port again) on exit.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         sendButton.addActionListener(messageController);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                setWindowClosed(true); // Update the flag
+                System.out.println("Window closed: " + true);
+            }
+        });
 
     }
 
@@ -123,7 +141,7 @@ public class TextChannel extends JFrame {
 
     }
 
-    public String getMessageField() {
+    public static String getMessageField() {
         return messageField.getText();
     }
 
