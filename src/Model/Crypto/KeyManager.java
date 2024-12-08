@@ -14,9 +14,9 @@ import java.security.PublicKey;
  * </p>
  *
  * @author Sam K
- * @version 12/3/2024
+ * @version 12/7/2024
  */
-public abstract class KeyManager {
+public abstract class KeyManager implements Cloneable {
 // Attributes
 
     /**
@@ -52,6 +52,18 @@ public abstract class KeyManager {
 
     /**
      * <p>
+     * Sets this KeyManager's Private and Public KeyPair to the given KeyPair.
+     * </p>
+     *
+     * @param keyPair The Private and Public KeyPair to give to this
+     *                KeyManager.
+     */
+    protected void setKeyPair(KeyPair keyPair) {
+        this.keyPair = keyPair;
+    }
+
+    /**
+     * <p>
      * Gets this KeyManager's PrivateKey.
      * </p>
      *
@@ -81,6 +93,25 @@ public abstract class KeyManager {
      *                                  wrong type or has an incompatible
      *                                  algorithm type.
      */
-    public abstract byte[] getSharedSecret(PublicKey secondPartyPublicKey)
+    public abstract byte[] getSharedKey(PublicKey secondPartyPublicKey)
     throws NoSuchAlgorithmException, InvalidKeyException;
+
+    /**
+     * <p>
+     * Creates and returns a copy of this KeyManager.
+     * </p>
+     *
+     * @return A copy of this KeyManager.
+     */
+    @Override
+    public KeyManager clone() {
+        try {
+            KeyManager clone = (KeyManager) super.clone();
+            clone.setKeyPair(
+                    new KeyPair(this.getPublicKey(), this.getPrivateKey()));
+            return clone;
+        } catch (CloneNotSupportedException cloneNotSupportedException) {
+            throw new AssertionError(cloneNotSupportedException);
+        }
+    }
 }

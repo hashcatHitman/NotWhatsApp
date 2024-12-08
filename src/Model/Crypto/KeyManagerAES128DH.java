@@ -16,9 +16,9 @@ import java.security.PublicKey;
  * </p>
  *
  * @author Sam K
- * @version 12/3/2024
+ * @version 12/7/2024
  */
-public class KeyManagerAES128DH extends KeyManager {
+public class KeyManagerAES128DH extends KeyManager implements Cloneable {
 // Constructors
 
     /**
@@ -33,10 +33,22 @@ public class KeyManagerAES128DH extends KeyManager {
     public KeyManagerAES128DH() throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("DH");
         keyPairGenerator.initialize(512);
-        this.keyPair = keyPairGenerator.generateKeyPair();
+        this.setKeyPair(keyPairGenerator.generateKeyPair());
     }
 
 // Methods
+
+    /**
+     * <p>
+     * Creates and returns a copy of this KeyManagerAES128DH.
+     * </p>
+     *
+     * @return A copy of this KeyManagerAES128DH.
+     */
+    @Override
+    public KeyManagerAES128DH clone() {
+        return (KeyManagerAES128DH) super.clone();
+    }
 
     /**
      * <p>
@@ -58,7 +70,7 @@ public class KeyManagerAES128DH extends KeyManager {
      *                                  algorithm type.
      */
     @Override
-    public byte[] getSharedSecret(PublicKey secondPartyPublicKey)
+    public byte[] getSharedKey(PublicKey secondPartyPublicKey)
     throws NoSuchAlgorithmException, InvalidKeyException {
         KeyAgreement keyAgreement = KeyAgreement.getInstance("DH");
         keyAgreement.init(this.getPrivateKey());
