@@ -10,9 +10,9 @@ import java.io.Serializable;
  *
  * @author Sam K
  * @author Paige G
- * @version 12/5/2024
+ * @version 12/7/2024
  */
-public class Message implements Serializable {
+public class Message implements Serializable, Cloneable {
 // Attributes
 
     /**
@@ -23,7 +23,7 @@ public class Message implements Serializable {
      * </p>
      */
     @Serial
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     /**
      * <p>
@@ -34,18 +34,30 @@ public class Message implements Serializable {
 
     /**
      * <p>
-     * The Message content, as a String.
-     * </p>
-     */
-    private final String text;
-
-    /**
-     * <p>
      * The time this Message was sent, as seconds since the Unix Epoch, as a
      * long.
+     * <br><br>
+     * Suggested String formatting looks like the following:
+     * {@snippet :
+     * Message message = new Message("Hello, world!", "Alice");
+     * String pattern = "MMMM dd, yyyy h:mm a";
+     * long time = message.getUnixTimeStamp();
+     * ZoneOffset offset = Clock.systemDefaultZone().getZone().getRules()
+     *                             .getOffset(Instant.now());
+     * DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+     * LocalDateTime dateTime = LocalDateTime.ofEpochSecond(time, 0, offset);
+     * String result = formatter.format(dateTime);
+     *}
      * </p>
      */
     private final long unixTimeStamp;
+
+    /**
+     * <p>
+     * The Message content, as a String.
+     * </p>
+     */
+    private String text;
 
 // Getters and Setters
 
@@ -73,6 +85,17 @@ public class Message implements Serializable {
 
     /**
      * <p>
+     * Sets the Message content to the given String.
+     * </p>
+     *
+     * @param text The String to set as the content of this Message.
+     */
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    /**
+     * <p>
      * Gets the time this Message was sent, as seconds since the Unix Epoch, as
      * a long.
      * </p>
@@ -95,12 +118,43 @@ public class Message implements Serializable {
      * @param sender A unique identifier of who sent this Message, as a String.
      */
     public Message(String text, String sender) {
-        this.unixTimeStamp = System.currentTimeMillis() / 1000L;
+        this(text, sender, System.currentTimeMillis() / 1000L);
+    }
+
+    /**
+     * <p>
+     * Constructs a new Message at the given time.
+     * </p>
+     *
+     * @param text          The Message content, as a String.
+     * @param sender        A unique identifier of who sent this Message, as a
+     *                      String.
+     * @param unixTimeStamp The time this Message was sent, as seconds since the
+     *                      Unix Epoch, as a long.
+     */
+    private Message(String text, String sender, long unixTimeStamp) {
+        this.unixTimeStamp = unixTimeStamp;
         this.sender = sender;
-        this.text = text;
+        this.setText(text);
     }
 
 // Methods
+
+    /**
+     * <p>
+     * Creates and returns a copy of this Message.
+     * </p>
+     *
+     * @return A copy of this Message.
+     */
+    @Override
+    public Message clone() {
+        try {
+            return (Message) super.clone();
+        } catch (CloneNotSupportedException cloneNotSupportedException) {
+            throw new AssertionError(cloneNotSupportedException);
+        }
+    }
 
     /**
      * <p>
