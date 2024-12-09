@@ -10,7 +10,13 @@ import java.security.NoSuchAlgorithmException; //to handle server errors
 /*
 @author: Ryan F
 //doc string of class
-This class is a command that starts server
+This class is a command that starts server by creating a new server object and
+starting it on a new thread
+Resources:
+https://www.vogella.com/tutorials/JavaNetworking/article.html
+https://docs.oracle.com/javase/7/docs/api/java/net/Socket.html
+https://stackoverflow.com/questions/10131377/socket-programming-multiple-client-to-single-server
+
  */
 public class StartServerCommand implements Command {
     private int port;
@@ -27,7 +33,8 @@ public class StartServerCommand implements Command {
 
             Server server = Server.getInstance(port, new KeyManagerShiftDH()); //create
             // check above for possible error with KeyManagerShiftDH, as was
-            // not needed before making constructor private for Server
+            // not needed before making constructor private for Server and
+            // singleton pattern
             Thread serverThread = new Thread(server, "Server");
             serverThread.start();
 
