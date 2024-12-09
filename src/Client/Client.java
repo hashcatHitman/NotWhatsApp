@@ -5,12 +5,10 @@ import Model.Crypto.EncryptionService;
 import Model.Crypto.KeyManager;
 import Model.Crypto.KeyManagerShiftDH;
 import Model.Crypto.ShiftCipher;
-import Model.Message;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Scanner;
 
 /**
  * <p>
@@ -19,7 +17,7 @@ import java.util.Scanner;
  * </p>
  *
  * @author Sam K
- * @version 12/7/2024
+ * @version 12/9/2024
  */
 public class Client implements Runnable {
 // Attributes
@@ -103,8 +101,8 @@ public class Client implements Runnable {
     /**
      * <p>
      * Establishes a shared secret between this Client and it's
-     * ServerClientHandler. Does this with another Client as well. Exchanges
-     * Messages with the Server.
+     * ServerClientHandler. Does this with another Client as well. Spawns a
+     * NetworkListener and NetworkRelay to exchange Messages with the Server.
      * </p>
      */
     @Override
@@ -128,65 +126,27 @@ public class Client implements Runnable {
                     new EncryptionService(myKeys, cipher, in, out);
             encryptionService.establishSecret();
 
-            /*
-             * TODO
-             *  Change how input is received, output is displayed, and how
-             *  you exit the loop/program to be linked to the GUI!
-             */
-            // Scanner for user input
-            Scanner scanner = new Scanner(System.in);
+            // Create a listener and relay
+            NetworkListener listener =
+                    new NetworkListener(in, encryptionService);
+            NetworkRelay relay = new NetworkRelay(encryptionService, out,
+                                                  this.getUsername());
 
-            while (true) {
-                // Prompt user for input
-                if (Thread.currentThread().getName().endsWith("A")) {
-                    System.out.print("Enter message (type 'exit' to quit):\t");
-                    String userInput = scanner.nextLine();
+            // Spawn listener and relay Threads
+            Thread listeningThread = new Thread(listener, Thread.currentThread()
+                                                                .getName() +
+                                                          " Listening Thread");
+            Thread relayThread = new Thread(relay,
+                                            Thread.currentThread().getName() +
+                                            " Relay Thread");
 
-                    // If the user types 'exit', break the loop and close
-                    // the connection.
-                    if (userInput.equalsIgnoreCase("exit")) {
-                        socket.close();
-                        break;
-                    }
+            // Start the threads
+            listeningThread.start();
+            relayThread.start();
 
-                    // Create a new Message object with the user input
-                    Message message =
-                            new Message(userInput, this.getUsername());
-                    System.out.println(Thread.currentThread().getName() +
-                                       " wants to send:\t" + message);
-
-                    // Encrypt it
-                    Message encrypted = encryptionService.encrypt(message);
-                    System.out.println(
-                            Thread.currentThread().getName() + " is sending " +
-                            "the message, but encrypted. It looks like:\t" +
-                            encrypted);
-
-                    // Send it
-                    out.writeObject(encrypted);
-                    out.flush();
-                }
-
-                // Wait for the server's response
-                System.out.println(Thread.currentThread().getName() +
-                                   " is waiting for an Object....");
-                Object object = in.readObject();
-                System.out.println(Thread.currentThread().getName() +
-                                   " received an Object!");
-
-                // If it's a Message, decrypt it and display
-                if (object instanceof Message response) {
-                    System.out.println(Thread.currentThread().getName() +
-                                       " received an encrypted response from " +
-                                       "the server:\t" + response);
-                    Message decrypted = encryptionService.decrypt(response);
-                    System.out.println(Thread.currentThread().getName() +
-                                       " decrypted the server response and " +
-                                       "got:\t" + decrypted);
-                }
-            }
-
-            scanner.close();
+            // Wait for them to finish
+            listeningThread.join();
+            relayThread.join();
         } catch (Exception exception) {
             exception.printStackTrace();
         }
