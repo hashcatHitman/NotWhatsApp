@@ -10,7 +10,7 @@ import java.io.Serializable;
  *
  * @author Sam K
  * @author Paige G
- * @version 12/7/2024
+ * @version 12/9/2024
  */
 public class Message implements Serializable, Cloneable {
 // Attributes
@@ -47,7 +47,7 @@ public class Message implements Serializable, Cloneable {
      * DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
      * LocalDateTime dateTime = LocalDateTime.ofEpochSecond(time, 0, offset);
      * String result = formatter.format(dateTime);
-     *}
+     * }
      * </p>
      */
     private final long unixTimeStamp;

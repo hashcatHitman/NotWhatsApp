@@ -1,4 +1,4 @@
-package Utility;
+package Model.Utility;
 
 /**
  * <p>
@@ -7,7 +7,7 @@ package Utility;
  * </p>
  *
  * @author Sam K
- * @version 12/7/2024
+ * @version 12/9/2024
  */
 public class TabInserter {
 // Methods

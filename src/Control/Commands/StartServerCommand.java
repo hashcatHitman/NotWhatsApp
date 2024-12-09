@@ -31,7 +31,7 @@ public class StartServerCommand implements Command {
             String localIP = GetIP.getLocalHostIP(); //get local ip
             System.out.println("Starting server on IP: " + localIP + ", Port: " + port);
 
-            Server server = Server.getInstance(port, new KeyManagerShiftDH()); //create
+            Server server = Server.getInstance(port); //create
             // check above for possible error with KeyManagerShiftDH, as was
             // not needed before making constructor private for Server and
             // singleton pattern

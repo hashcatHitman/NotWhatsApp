@@ -20,13 +20,18 @@ import java.util.concurrent.LinkedBlockingQueue;
  * </p>
  *
  * @author Sam K
- * @author Ryan F - singleton implementation (private constructor,
- * getInstance method, instance variable)
+ * @author Ryan F - singleton implementation (private constructor, getInstance
+ * method, instance variable)
  * @version 12/7/2024
  */
 public class Server implements Runnable {
 // Attributes
-//Singleton reference
+
+    /**
+     * <p>
+     * The Singleton instance.
+     * </p>
+     */
     private static volatile Server instance;
 
     /**
@@ -51,23 +56,6 @@ public class Server implements Runnable {
      * </p>
      */
     private final int port;
-
-    //Singleton method
-    public static Server getInstance(int port, KeyManager keyManager) {
-        if (instance == null) { //First check
-            synchronized (Server.class) { //Synchronized block
-                if (instance == null) { //Double check (WITH synchronization)
-                    // which is thread safe because of the synchronized block
-                    // that is used to get the instance
-                    instance = new Server(port, keyManager);
-                }
-            }
-        }
-        return instance;
-    }
-
-
-
 
 // Getters and Setters
 
@@ -112,6 +100,20 @@ public class Server implements Runnable {
 
     /**
      * <p>
+     * Constructs a new Server with the given KeyManager.
+     * </p>
+     *
+     * @param port       The port number to open a Server on, as an integer.
+     * @param keyManager The KeyManager to assign to this Server.
+     */
+    private Server(int port, KeyManager keyManager) {
+        this.port = port;
+        this.handlers = new HashMap<>();
+        this.keyManager = keyManager;
+    }
+
+    /**
+     * <p>
      * Constructs a new Server with the default KeyManager and the given port.
      * </p>
      *
@@ -121,27 +123,40 @@ public class Server implements Runnable {
      *                                  KeyPairGeneratorSpi implementation for
      *                                  the default specified algorithm.
      */
-
-    //needs to be made private to ensure singleton
     private Server(int port) throws NoSuchAlgorithmException {
         this(port, new KeyManagerShiftDH());
     }
 
+// Methods
+
     /**
      * <p>
-     * Constructs a new Server with the given KeyManager.
+     * Gets the Singleton instance of the Server.
      * </p>
      *
-     * @param port       The port number to open a Server on, as an integer.
-     * @param keyManager The KeyManager to assign to this Server.
+     * @param port The port number to open a Server on, as an integer.
+     *
+     * @return The Singleton instance of the Server.
+     *
+     * @throws NoSuchAlgorithmException If no Provider supports a
+     *                                  KeyPairGeneratorSpi implementation for
+     *                                  the default specified algorithm.
      */
-    public Server(int port, KeyManager keyManager) {
-        this.port = port;
-        this.handlers = new HashMap<>();
-        this.keyManager = keyManager;
+    public static Server getInstance(int port) throws NoSuchAlgorithmException {
+        // First check
+        if (Server.instance == null) {
+            // Synchronize on the class
+            synchronized (Server.class) {
+                // Double check (WITH synchronization)
+                if (Server.instance == null) {
+                    // which is thread safe because of the synchronized block
+                    // that is used to get the instance
+                    Server.instance = new Server(port);
+                }
+            }
+        }
+        return Server.instance;
     }
-
-// Methods
 
     /**
      * <p>

@@ -4,7 +4,7 @@ import Model.Crypto.EncryptionService;
 import Model.Crypto.KeyManager;
 import Model.Crypto.ShiftCipher;
 import Model.Message;
-import Utility.TabInserter;
+import Model.Utility.TabInserter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -22,7 +22,7 @@ import java.util.concurrent.BlockingQueue;
  * </p>
  *
  * @author Sam K
- * @version 12/7/2024
+ * @version 12/9/2024
  */
 public class ServerClientHandler extends Thread {
 // Attributes
