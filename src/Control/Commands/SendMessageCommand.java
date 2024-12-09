@@ -1,19 +1,27 @@
 package Control.Commands;
 
+import Model.Message;
+import Model.Observer.MessageNotification;
+
 public class SendMessageCommand implements Command{
-    private String messageText;
+    private Message message;
+    private MessageNotification messageNotification;
 
     /*
     Concrete Command to send a message
      */
-    public SendMessageCommand(String messageText) {
-        this.messageText = messageText;
+    public SendMessageCommand(Message message, MessageNotification messageNotification) {
+        this.message = message;
+        this.messageNotification = messageNotification;
     }
 
     @Override
-    public void execute(){
-        //TODO: Implement logic to send message
-        System.out.println("Sending message: " + messageText);
+    public void execute() {
+        try {
+            messageNotification.sendMessage(message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

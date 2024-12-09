@@ -1,5 +1,6 @@
 package Control;
 
+import Control.Commands.SendMessageCommand;
 import Model.Message;
 import View.TextChannel;
 
@@ -21,13 +22,13 @@ public class MessageController implements ActionListener {
             /*
                 Test the observer pattern
              */
-            try {
-                Message message = new Message(textChannel.getMessageField(),
-                                              textChannel.getUser().getUsername());
-                textChannel.getMessage().sendMessage(message); // Get the users
-            } catch (BadLocationException ex) {
-                throw new RuntimeException(ex);
-            }
+            Message message = new Message(textChannel.getMessageField(),
+                                          textChannel.getUser().getUsername());
+            //Create command to send message
+            SendMessageCommand sendMessageCommand =
+                    new SendMessageCommand(message, textChannel.getMessage());
+            sendMessageCommand.execute();
+
             textChannel.setMessageField("");
 
         }
