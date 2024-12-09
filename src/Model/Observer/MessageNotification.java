@@ -1,5 +1,7 @@
 package Model.Observer;
 
+import Model.Message;
+
 import javax.swing.text.BadLocationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +55,9 @@ public class MessageNotification {
      * @throws BadLocationException Needed for a handling style document
      * exceptions in addMessage() in TextChannel
      */
-    public void sendMessage(String message) throws BadLocationException {
+    public void sendMessage(Message message) throws BadLocationException {
         for (nwaClient user : users) {
-            user.receiveMessage(user.getUsername(), message, user.getColor());
+            user.receiveMessage(message, user.getColor());
         }
     }
 }

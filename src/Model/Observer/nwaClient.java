@@ -1,5 +1,7 @@
 package Model.Observer;
 
+import Model.Message;
+
 import javax.swing.text.BadLocationException;
 import java.awt.Color;
 
@@ -14,6 +16,6 @@ public interface nwaClient {
 
     Color getColor();
 
-    void receiveMessage(String username, String message, Color color)
+    void receiveMessage( Message message, Color color)
     throws BadLocationException;
 }

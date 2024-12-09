@@ -126,10 +126,11 @@ public class TextChannel extends JFrame {
      * Adds the users' message to the JTextPane with styles
      *
      * @param message The users' message
-     * @param color The color of the users username
+     * @param string
+     * @param color   The color of the users username
      *
      * @throws BadLocationException Needed for handling style document
-     * exceptions
+     *                              exceptions
      */
     public void addMessage(String message, Color color)
     throws BadLocationException {

@@ -5,6 +5,7 @@ package Model.Observer;
  * @author Paige
  */
 
+import Model.Message;
 import View.TextChannel;
 
 import javax.swing.text.BadLocationException;
@@ -68,9 +69,10 @@ public class User implements nwaClient {
      * exceptions in addMessage() in TextChannel
      */
     @Override
-    public void receiveMessage(String username, String message, Color color)
+    public void receiveMessage( Message message, Color color)
     throws BadLocationException {
-        textChannel.addMessage(message, getColor());
+        textChannel.addMessage(message.toString(), getColor());
+        System.out.println(message.toString());
     }
 
 }
