@@ -15,9 +15,8 @@ import java.security.NoSuchAlgorithmException;
  * @author Paige G
  * @author Sam K
  * @author Ryan F
- * @version 12/7/2024
- * @implNote Currently acts as a sort of scratch paper for testing development
- * code. This is liable to change!
+ * @version 12/9/2024
+ * @implNote Commented out code was used for testing pursposes but just use the
  */
 public class Main {
 // Methods

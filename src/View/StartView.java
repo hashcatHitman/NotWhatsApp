@@ -32,7 +32,7 @@ public class StartView extends JFrame {
         setLayout(new FlowLayout());
         add(serverButton);
         add(clientButton);
-
+        //button for choosing
         serverButton.addActionListener(e -> {
             String portStr =
                     JOptionPane.showInputDialog("Enter server port:"); // Show input dialog
@@ -53,8 +53,8 @@ public class StartView extends JFrame {
             String portStr = JOptionPane.showInputDialog("Enter server port:");
             if (ip != null && portStr != null && !ip.isEmpty() && !portStr.isEmpty()) { // check if they entered a value, and if the value is not emp
                 try {
-                    int port = Integer.parseInt(portStr);
-                    //Creates connect command
+                    int port = Integer.parseInt(portStr); // Parse port number
+                    //Creates connect command and executes it
                     Command connectCmd = new ConnectCommand(ip, port);
                     connectCmd.execute();
                     dispose(); // Close this view
