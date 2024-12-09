@@ -3,6 +3,7 @@ package Control;
 import Client.Client;
 import Server.Server;
 import View.ServerView;
+import View.StartView;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -13,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
  *
  * @author Paige G
  * @author Sam K
+ * @author Ryan F
  * @version 12/7/2024
  * @implNote Currently acts as a sort of scratch paper for testing development
  * code. This is liable to change!
@@ -29,8 +31,11 @@ public class Main {
      */
     public static void main(String[] args)
     throws NoSuchAlgorithmException, InterruptedException {
-        new ServerView();
 
+        new StartView();
+
+        //new ServerView();
+/*
         // Multithreaded test for a single machine
         // Create Server and Clients.
         final int port = 12345;
@@ -56,5 +61,8 @@ public class Main {
         serverThread.join();
         clientAThread.join();
         clientBThread.join();
+
+        */
+
     }
 }
