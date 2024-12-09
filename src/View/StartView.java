@@ -41,7 +41,7 @@ public class StartView extends JFrame {
                     int port = Integer.parseInt(portStr);
                     Command startServerCmd = new StartServerCommand(port); // Create command
                     startServerCmd.execute(); // Execute command
-                    dispose(); // Close this view
+                    //dispose(); // Close this view
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(this, "Invalid port number!");
                 }
@@ -54,6 +54,7 @@ public class StartView extends JFrame {
             if (ip != null && portStr != null && !ip.isEmpty() && !portStr.isEmpty()) { // Check if user pressed cancel and if they entered a value, and if the value is not emp
                 try {
                     int port = Integer.parseInt(portStr);
+                    //Creates connect command
                     Command connectCmd = new ConnectCommand(ip, port);
                     connectCmd.execute();
                     dispose(); // Close this view
