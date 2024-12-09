@@ -34,7 +34,7 @@ public class FormController implements ActionListener {
 
                 JOptionPane.showMessageDialog(view, "Error: You did not enter" +
                                                     " a username.");
-                view.setVisible(true);
+                view.setVisible(true); //redisplay the server view
             }
         }
     }
