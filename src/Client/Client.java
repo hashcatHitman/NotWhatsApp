@@ -19,7 +19,9 @@ import java.net.Socket;
  * </p>
  *
  * @author Sam K
- * @version 12/7/2024
+ * @author Ryan F - made changes to allow for observer pattern (worked with
+ * Paige)
+ * @version 12/9/2024
  */
 public class Client implements Runnable {
 // Attributes

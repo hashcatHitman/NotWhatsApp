@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
  * </p>
  *
  * @author Sam K
+ * @author Paige
  * @version 12/9/2024
  */
 public class NetworkListener implements Runnable {

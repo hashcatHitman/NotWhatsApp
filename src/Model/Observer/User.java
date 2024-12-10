@@ -75,9 +75,9 @@ public class User implements nwaClient {
         SwingUtilities.invokeLater(() -> {
             try {
                 if (!message.getSender().equals(username)) {
-                    textChannel.addMessage(message, getColor(), username);
+                    textChannel.addMessage(message, getColor());
                 } else {
-                    textChannel.addMessage(message, Color.BLACK, username);
+                    textChannel.addMessage(message, Color.BLACK);
                 }
             } catch (BadLocationException e) {
                 e.printStackTrace();

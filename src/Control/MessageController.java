@@ -8,7 +8,9 @@ import View.TextChannel;
 import javax.swing.text.BadLocationException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+/*
+* @authors Paige & Ryan F
+ */
 public class MessageController implements ActionListener {
 
     TextChannel textChannel;
