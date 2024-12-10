@@ -1,5 +1,6 @@
 package Control;
 
+import Client.NetworkRelay;
 import Control.Commands.SendMessageCommand;
 import Model.Message;
 import View.TextChannel;
@@ -26,7 +27,8 @@ public class MessageController implements ActionListener {
                                           textChannel.getUser().getUsername());
             //Create command to send message
             SendMessageCommand sendMessageCommand =
-                    new SendMessageCommand(message, textChannel.getMessage());
+                    new SendMessageCommand(message,
+                                           textChannel.getNetworkRelay());
             sendMessageCommand.execute();
 
             textChannel.setMessageField("");

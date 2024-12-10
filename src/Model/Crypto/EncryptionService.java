@@ -1,7 +1,7 @@
 package Model.Crypto;
 
 import Model.Message;
-import Utility.TabInserter;
+import Model.Utility.TabInserter;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
