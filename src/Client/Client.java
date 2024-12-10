@@ -5,7 +5,6 @@ import Model.Crypto.EncryptionService;
 import Model.Crypto.KeyManager;
 import Model.Crypto.KeyManagerShiftDH;
 import Model.Crypto.ShiftCipher;
-import Model.Observer.MessageNotification;
 import View.TextChannel;
 
 import java.io.ObjectInputStream;
@@ -129,7 +128,7 @@ public class Client implements Runnable {
                     new EncryptionService(myKeys, cipher, in, out);
             encryptionService.establishSecret();
 
-            //creating textchannel object
+            // Creating the textChannel object
             TextChannel textChannel = new TextChannel(this.getUsername());
             textChannel.setVisible(true);
             // Create a listener and relay
@@ -139,11 +138,11 @@ public class Client implements Runnable {
             NetworkRelay relay = new NetworkRelay(encryptionService, out,
                                                   this.getUsername());
 
-            //let listener update the GUI using observer pattern
+            // Let listener update the GUI using the observer pattern
             listener.setMessageNotification(textChannel.getMessage());
 
-            //Allows message controller (using TextChannel) to send messages
-            // uisng a relay approach
+            // Allows message controller (using TextChannel) to send messages
+            // using a relay approach
             textChannel.setNetworkRelay(relay);
 
             // Spawn listener and relay Threads

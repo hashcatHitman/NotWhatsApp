@@ -7,15 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MessageNotification.java The Subject of the observer
+ * <p>
+ * The Publisher of the observer The MessageNotification class keeps track of
+ * each active user on the server. When a user sends a message, the
+ * sendMessage() method will iterate through each user/client (The observers)
+ * and update their individual GUIs.
+ * </p>
  *
  * @author Paige Grimes
- * @author Ryan F
  */
 public class MessageNotification {
 
     private final List<nwaClient> users;
-    private int numUsers;
 
     /**
      * Create the MessageNotification object and initialize the List to hold the
@@ -32,7 +35,6 @@ public class MessageNotification {
      */
     public void addClient(User user) {
         users.add(user);
-        numUsers++;
     }
 
     /**
@@ -42,21 +44,21 @@ public class MessageNotification {
      */
     public void removeClient(User user) {
         users.remove(user);
-        numUsers--;
-    }
-    public int getNumUsers() {
-        return numUsers;
     }
 
     /**
-     * Iterates through the list of Users and sends them the message
+     * <p>
+     * Iterates through the list of Users and sends them the new message
+     * </p>
      *
      * @param message A String of the users' message
      *
      * @throws BadLocationException Needed for a handling style document
-     * exceptions in addMessage() in TextChannel
+     *                              exceptions in addMessage() in TextChannel
      */
     public void sendMessage(Message message) throws BadLocationException {
+        // For each active user on the server, call receiveMessage() to notify
+        // them of a new message
         for (nwaClient user : users) {
             user.receiveMessage(message, user.getColor());
         }

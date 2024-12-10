@@ -23,16 +23,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 
 /**
- * TODO: Move to Readme with explanations
- * Current Resources:
- * https://stackoverflow.com/questions/31928306/how-to-create-and-use-a-jtextpane
- * https://docs.oracle.com/javase/8/docs/api/javax/swing/JTextPane.html
- * https://stackoverflow.com/questions/4059198/jtextpane-appending-a-new-string
- * https://stackoverflow.com/questions/50152438/jtextpane-wont-display-text-added-by-defaultstyleddocument
- * https://stackoverflow.com/questions/4246351/creating-random-colour-in-java
- */
-
-/**
  * This class controls the GUI for the chat window.
  *
  * @author Paige G
@@ -50,25 +40,12 @@ public class TextChannel extends JFrame {
 
     static MessageNotification messageNotification;
 
-    User user;
-
-    public TextChannel getTextChannel() {
-        return textChannel;
-    }
+    private final User user;
 
     TextChannel textChannel;
 
-    //network relay field
+    // Network relay field
     private NetworkRelay networkRelay;
-
-    //setter for networkRelay
-    public void setNetworkRelay(NetworkRelay networkRelay) {
-        this.networkRelay = networkRelay;
-    }
-
-    public NetworkRelay getNetworkRelay() {
-        return networkRelay;
-    }
 
     /**
      * The constructor for the chat GUI. Creates the JFrame, adds and styles the
@@ -87,9 +64,7 @@ public class TextChannel extends JFrame {
         this.user = new User(username, this);
         messageNotification = new MessageNotification();
         messageNotification.addClient(getUser());
-        // Display the chat window
-        SwingUtilities.invokeLater(() -> this.setVisible(true));
-//        ConnectCommand.getClient().run();
+
         // Create the MessageController that hold the button action listeners.
         MessageController messageController = new MessageController(this);
         JPanel chatPanel = new JPanel();
@@ -97,10 +72,6 @@ public class TextChannel extends JFrame {
         // Create a GroupLayout to organize the components.
         GroupLayout layout = new GroupLayout(chatPanel);
         chatPanel.setLayout(layout);
-
-//        // Display the number of users online
-//        JLabel numUsers =
-//                new JLabel("Users: " + messageNotification.getNumUsers());
 
         messageArea = new JTextPane();
 
@@ -140,9 +111,8 @@ public class TextChannel extends JFrame {
         // Finalize frame
         add(chatPanel);
         pack();
-        // TODO: We'll have to change this if we want to go to the main frame
-        //  (to enter ip and port again) on exit.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // Add the ActionListener
         sendButton.addActionListener(messageController);
 
     }
@@ -164,35 +134,47 @@ public class TextChannel extends JFrame {
         StyleConstants.setForeground(usernameStyle, color);
         Style messageStyle =
                 messageArea.getStyledDocument().addStyle("messageStyle", null);
-        // Add the username and message to the document (JTextPane)
 
+        // Add the username and message to the document (JTextPane)
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
                                  message.getSender() + ": ", usernameStyle);
-
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
-                                 message.toString() + "\n", messageStyle);
+                                 message + "\n", messageStyle);
 
     }
 
     /**
      * Getters and Setters
      */
+    // Get the users' message as a String
     public static String getMessageField() {
         return messageField.getText();
     }
 
+    // Used for clearing the messageField after the user sent a message
     public void setMessageField(String message) {
         messageField.setText(message);
     }
 
+    // Returns the user for 'this' instance of the TextChannel
     public User getUser() {
         return user;
     }
 
+    // Returns the message notification object to be called by other classes
     public static MessageNotification getMessage() {
         return messageNotification;
     }
 
+    // Setter for networkRelay
+    public void setNetworkRelay(NetworkRelay networkRelay) {
+        this.networkRelay = networkRelay;
+    }
+
+    // Return the NetworkRelay
+    public NetworkRelay getNetworkRelay() {
+        return networkRelay;
+    }
 }
