@@ -26,7 +26,8 @@ public class MessageController implements ActionListener {
                                           textChannel.getUser().getUsername());
             //Create command to send message
             SendMessageCommand sendMessageCommand =
-                    new SendMessageCommand(message, textChannel.getMessage());
+                    new SendMessageCommand(message,
+                                           textChannel.getNetworkRelay());
             sendMessageCommand.execute();
 
             textChannel.setMessageField("");

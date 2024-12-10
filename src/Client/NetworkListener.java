@@ -2,6 +2,7 @@ package Client;
 
 import Model.Crypto.EncryptionService;
 import Model.Message;
+import Model.Observer.MessageNotification;
 
 import java.io.ObjectInputStream;
 
@@ -30,6 +31,14 @@ public class NetworkListener implements Runnable {
      * </p>
      */
     private final ObjectInputStream in;
+
+    //field for storing messagenotification
+    private MessageNotification messageNotification;
+
+    //setter for messageNotification
+    public void setMessageNotification(MessageNotification notification) {
+        this.messageNotification = notification;
+    }
 
 // Getters and Setters
 
@@ -111,6 +120,12 @@ public class NetworkListener implements Runnable {
                     System.out.println(Thread.currentThread().getName() +
                                        " decrypted the server response and " +
                                        "got:\t" + decrypted);
+                    //Update the gui with the message
+                    if (messageNotification != null) {
+                        messageNotification.sendMessage(decrypted); //this
+                        // triggers the update method in the gui
+                        // (receiveMessage)
+                    }
                 }
             }
         } catch (Exception exception) {

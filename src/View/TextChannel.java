@@ -3,6 +3,7 @@ package View;
 import Control.MessageController;
 import Model.Observer.MessageNotification;
 import Model.Observer.User;
+import Client.NetworkRelay;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -45,6 +46,18 @@ public class TextChannel extends JFrame {
     JTextField messageField;
 
     public JButton sendButton;
+
+    //network relay field
+    private NetworkRelay networkRelay;
+
+    //setter for networkRelay
+    public void setNetworkRelay(NetworkRelay networkRelay) {
+        this.networkRelay = networkRelay;
+    }
+
+    public NetworkRelay getNetworkRelay() {
+        return networkRelay;
+    }
 
     MessageNotification messageNotification;
 
@@ -115,8 +128,6 @@ public class TextChannel extends JFrame {
         // Finalize frame
         add(chatPanel);
         pack();
-        // TODO: We'll have to change this if we want to go to the main frame
-        //  (to enter ip and port again) on exit.
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         sendButton.addActionListener(messageController);
 
@@ -126,7 +137,7 @@ public class TextChannel extends JFrame {
      * Adds the users' message to the JTextPane with styles
      *
      * @param message The users' message
-     * @param string
+     * @param String
      * @param color   The color of the users username
      *
      * @throws BadLocationException Needed for handling style document

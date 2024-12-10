@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * MessageNotification.java The Subject of the observer
+ * MessageNotification.java The publisher of the observer
  *
  * @author Paige Grimes
  */

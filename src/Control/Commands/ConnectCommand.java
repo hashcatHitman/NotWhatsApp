@@ -35,10 +35,11 @@ public class ConnectCommand implements Command {
         }
 
         Client client = new Client(host, port, username); // Create a new client
+        //NetworkRelay
         Thread clientThread = new Thread(client, "Client-" + username); // Create a new thread for the client
         clientThread.start(); // Start the client thread
 
-        // Open the chat window
+        // Open the chat window - originally used before connecting everything
         TextChannel textChannel = new TextChannel(username);
         textChannel.setVisible(true);
     }
