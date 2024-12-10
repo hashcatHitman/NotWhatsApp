@@ -90,12 +90,12 @@ public class User implements nwaClient {
                 if (!message.getSender().equals(username)) {
                     textChannel.addMessage(message, getColor());
                     // Play a sound when a message is received
-                    String soundFilePath = "src/Model/Sound" +
-                                           "/messagenotificationSound" +
-                                           ".wav";
+                    String soundFilePath =
+                            "src/Model/Sound" + "/messagenotificationSound" +
+                            ".wav";
                     // Create a new PlaySoundCommand object and execute it
-                    PlaySoundCommand playSoundCommand = new PlaySoundCommand(
-                            soundFilePath);
+                    PlaySoundCommand playSoundCommand =
+                            new PlaySoundCommand(soundFilePath);
                     playSoundCommand.execute();
                 } else {
                     // Otherwise, they sent the message; their font color is
