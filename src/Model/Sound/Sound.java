@@ -46,8 +46,8 @@ public class Sound {
             //play the sound
             clip.start();
             //need delay before closing clip object to allow sound to play
-            Thread.sleep(4000);
-            //close the clip object
+            Thread.sleep(4000); //the sound is about 4 seconds long
+            // close the clip object
             clip.close();
         } catch (Exception e) {
             e.printStackTrace();

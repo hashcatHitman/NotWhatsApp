@@ -13,6 +13,7 @@ package Model.Observer;
  * @author Paige
  */
 
+import Control.Commands.PlaySoundCommand;
 import Model.Message;
 import View.TextChannel;
 
@@ -88,6 +89,14 @@ public class User implements nwaClient {
                 // TextChannel window
                 if (!message.getSender().equals(username)) {
                     textChannel.addMessage(message, getColor());
+                    // Play a sound when a message is received
+                    String soundFilePath = "src/Model/Sound" +
+                                           "/messagenotificationSound" +
+                                           ".wav";
+                    // Create a new PlaySoundCommand object and execute it
+                    PlaySoundCommand playSoundCommand = new PlaySoundCommand(
+                            soundFilePath);
+                    playSoundCommand.execute();
                 } else {
                     // Otherwise, they sent the message; their font color is
                     // black
