@@ -29,21 +29,26 @@ public class StartServerCommand implements Command {
     @Override
     public void execute() {
         try {
-            String localIP = GetIP.getLocalHostIP(); //get local ip
-            System.out.println("Starting server on IP: " + localIP + ", Port: " + port);
-
+            String localIP = GetIP.getLocalHostIP(); //get local ip using
+            // method from GetIP class
+            System.out.println(
+                    "Starting server on IP: " + localIP + ", Port: " + port);
+            //singleton pattern implementation
             Server server = Server.getInstance(port); //create
             // check above for possible error with KeyManagerShiftDH, as was
             // not needed before making constructor private for Server and
             // singleton pattern
-            Thread serverThread = new Thread(server, "Server");
-            serverThread.start();
+            Thread serverThread = new Thread(server,
+                                             "Server"); //create a new thread for the server
+            serverThread.start(); //start the server thread
 
             // Show server info to the user
             JOptionPane.showMessageDialog(null,
-                                          "Server started.\nIP: " + localIP + "\nPort: " + port);
+                                          "Server started.\nIP: " + localIP +
+                                          "\nPort: " + port);
 
-        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) { //to handle server erros
+        } catch (NoSuchAlgorithmException |
+                 InvalidAlgorithmParameterException e) { //to handle server erros
             e.printStackTrace();
         }
     }

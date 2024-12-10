@@ -12,7 +12,7 @@ import java.util.Scanner;
  * </p>
  *
  * @author Sam K
- * @author Ryan F
+ * @author Ryan F - helped with relaying messages
  * @version 12/9/2024
  */
 public class NetworkRelay implements Runnable {
