@@ -39,11 +39,20 @@ public class NetworkRelay implements Runnable {
      */
     private final String username;
 
-    //store current message
+    /**
+     * <p>
+     * The current message object
+     * </p>
+     */
     private Message currentMessage;
 
-    //setter for current message and this notifies the relay thread it got a
-    //message to send
+    /**
+     * <p>
+     *     A setter for the current Message. This notifies the relay thread it
+     *     got a message to send
+     *     Ryan F
+     * </p>
+     */
     public synchronized void sendCurrentMessage(Message message) {
         this.currentMessage = message;
         notify(); //notify the relay thread that it has a message to send
@@ -120,19 +129,22 @@ public class NetworkRelay implements Runnable {
         try {
             //loop for sending messages
             while (true) {
-                //Wait until we have a currentMessage to send (notified from setCurrentMessage())
-                synchronized (this) { //syncrhonized does not allow multiple threads to access the same block of code
+                // Wait until we have a currentMessage to send (notified from
+                // setCurrentMessage())
+                synchronized (this) { // syncrhonized does not allow multiple
+                    // threads to access the same block of code
                     while (currentMessage == null) {
                         wait(); // Wait until setCurrentMessage() is called
                     }
                 }
 
-                //create a copy of the current message to send
+                // Create a copy of the current message to send
                 Message messageToSend = currentMessage;
                 currentMessage = null; // Reset current message for next
                 // time, so the thread waits for the next message, otherwise
                 // it will keep sending the same message
 
+                // Print out the message the user wants to send
                 System.out.println(
                         Thread.currentThread().getName() + " wants to send:\t" +
                         messageToSend);

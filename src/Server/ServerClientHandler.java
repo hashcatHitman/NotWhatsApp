@@ -223,9 +223,8 @@ public class ServerClientHandler extends Thread {
                     System.out.println(Thread.currentThread().getName() +
                                        " got (decrypted):\t" + decrypted);
 
-//                    this.getServer()
-//                        .send(decrypted, Thread.currentThread().getName());
-                    this.getServer().broadcast(decrypted, this);
+                    this.getServer()
+                        .send(decrypted, Thread.currentThread().getName());
 
                     Message encrypted = this.getEncryptionService()
                                             .encryptServer(decrypted);

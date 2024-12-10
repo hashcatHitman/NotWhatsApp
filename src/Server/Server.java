@@ -239,16 +239,4 @@ public class Server implements Runnable {
             }
         }
     }
-
-    public void broadcast(Message message, ServerClientHandler sender) {
-        for (ServerClientHandler handler : handlers.values()) {
-            if (handler != sender) { // Exclude the sender
-                try {
-                    handler.send(message);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

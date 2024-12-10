@@ -1,6 +1,14 @@
 package Model.Observer;
 /**
- * User.java The Observer object (Users) that will receive notifications
+ * <p>
+ * The Users class represents each client on the server. The users choose their
+ * username and get a random color assigned to the font of their name which will
+ * display the same for other clients on the server. The user will know which
+ * message they sent because their username will be in plain text, font color
+ * black. The User class implements the interface nwaClient (NotWhatsApp client)
+ * and defines the receiveNotification() method which sends the Message object
+ * to the TextChannel GUI and the users corresponding color.
+ * </p>
  *
  * @author Paige
  */
@@ -70,21 +78,25 @@ public class User implements nwaClient {
      *                              exceptions in addMessage() in TextChannel
      */
     @Override
-    public void receiveMessage(Message message, Color color)
-    throws BadLocationException {
+    public void receiveMessage(Message message, Color color) {
+        // Professor Salu reminded me about using invokeLater when rendering
+        // the Swing GUI
         SwingUtilities.invokeLater(() -> {
             try {
+                // If the message is being returned to the receiver, pass the
+                // users color so that it displays on the other users
+                // TextChannel window
                 if (!message.getSender().equals(username)) {
                     textChannel.addMessage(message, getColor());
                 } else {
+                    // Otherwise, they sent the message; their font color is
+                    // black
                     textChannel.addMessage(message, Color.BLACK);
                 }
             } catch (BadLocationException e) {
                 e.printStackTrace();
             }
         });
-//        textChannel.addMessage(message.toString(), getColor());
-//        System.out.println(message.toString());
     }
 
 }

@@ -63,7 +63,7 @@ public class NetworkListener implements Runnable {
         return this.in;
     }
 
-    //setter for messageNotification
+    // Setter for messageNotification
     public void setMessageNotification(MessageNotification notification) {
         this.messageNotification = notification;
     }
@@ -106,12 +106,6 @@ public class NetworkListener implements Runnable {
                 Object readObject = this.getIn().readObject();
                 System.out.println(Thread.currentThread().getName() +
                                    " received an Object!");
-
-                /*
-                 * TODO
-                 *  - Actually display received messages in the GUI.
-                 *  - Listen for special Client-Server communication Objects?
-                 */
                 // If it's a Message, decrypt it and display
                 if (readObject instanceof Message response) {
                     System.out.println(Thread.currentThread().getName() +
@@ -122,6 +116,7 @@ public class NetworkListener implements Runnable {
                     System.out.println(Thread.currentThread().getName() +
                                        " decrypted the server response and " +
                                        "got:\t" + decrypted);
+                    // Call the publisher and send the message to all users
                     messageNotification.sendMessage(decrypted);
                 }
             }
