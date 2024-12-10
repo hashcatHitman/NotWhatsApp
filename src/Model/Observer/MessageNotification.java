@@ -38,15 +38,6 @@ public class MessageNotification {
     }
 
     /**
-     * Removes the subscriber for the chat notifications.
-     *
-     * @param user The User object that will be subscribed to notifications.
-     */
-    public void removeClient(User user) {
-        users.remove(user);
-    }
-
-    /**
      * <p>
      * Iterates through the list of Users and sends them the new message
      * </p>

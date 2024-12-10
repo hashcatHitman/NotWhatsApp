@@ -1,6 +1,7 @@
 package View;
 
 import Client.*;
+import Control.Commands.PlaySoundCommand;
 import Control.MessageController;
 import Model.Message;
 import Model.Observer.MessageNotification;
@@ -81,7 +82,7 @@ public class TextChannel extends JFrame {
         messageArea.setPreferredSize(new Dimension(200, 200));
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
-                                 "Hello " + getUser().getUsername() + "!\n " +
+                                 "Hello " + getUser().getUsername() + "!\n" +
                                  "Try starting a conversation by sending a " +
                                  "message.\n", null);
 
@@ -142,7 +143,6 @@ public class TextChannel extends JFrame {
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
                                  message + "\n", messageStyle);
-
     }
 
     /**

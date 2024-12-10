@@ -239,12 +239,6 @@ public class ServerClientHandler extends Thread {
                     this.getOut().writeObject(key);
                     this.getOut().flush();
                 } else {
-                    /*
-                     * TODO
-                     *  Additional elseif to check for instance of some sort
-                     *  of "Control message" class uniquely used for commands to
-                     *  the Server/Client? IE, "Disconnect".
-                     */
                     // Else, Oh No.
                     System.out.println(Thread.currentThread().getName() +
                                        " received an unknown object type.");

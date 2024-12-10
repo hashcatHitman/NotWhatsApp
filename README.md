@@ -1,4 +1,5 @@
 # Final Project
+
 *CSCI2500: Object Oriented Design*
 
 ---
@@ -10,16 +11,42 @@ Details pending.
 #### Refresher on material → [Link](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
 
 * Model:
-  * It directly manages the data, logic and rules of the application
-    * Observer Patter
-    * Strategy || Facade
+    * It directly manages the data, logic and rules of the application
+        * Observer Patter
+        * Facade
 * View:
-  * Any representation of information such as a chart, diagram or table.
+    * Any representation of information such as a chart, diagram or table.
 * Controller:
-  * Accepts input and converts it to commands for the model or view.
-    * Command Pattern
+    * Accepts input and converts it to commands for the model or view.
+        * Command Pattern
+        * ActionListeners, which execute the commands.
+* Server
+    * Singleton
 
-Singleton?
+### Paige Grimes
+
+* TextChanel
+    * [JTextPane stackoverflow] (https://stackoverflow.com/questions/31928306/how-to-create-and-use-a-jtextpane)
+    * [JTextPane JavaDocs] (https://docs.oracle.com/javase/8/docs/api/javax/swing/JTextPane.html)
+    * [JTextPane stackOverflow] (https://stackoverflow.com/questions/4059198/jtextpane-appending-a-new-string)
+    * [DefaultStyledDocument for JTextPane] (https://stackoverflow.com/questions/50152438/jtextpane-wont-display-text-added-by-defaultstyleddocument)
+* User class
+    * [RandomColorGenerator] (https://stackoverflow.com/questions/4246351/creating-random-colour-in-java)
+    * Professor Salu reminded me of swingInvokers and why they are important
+      * ``"Remember, invoke later is like politely asking the renderer to show 
+         when you have the chance.  If you want to be more demanding, invoke 
+         and wait. "``
+* NetworkListener
+    * After familiarizing myself with Sam's implementation of the class and
+      how it interacts with other classes, I was able to come to the
+      conclusion of calling the observers notifier there.
+* NetworkRelay
+    * I had begun looking at different resources to integrate the gui with the
+      NetworkRelay but nothing was quite working. I had gotten the gui to
+      update with the ObjectStreamReader but not the Users input. After Ryan
+      shared his part on a separate branch (That worked) to get the users'
+      message, I was able to add it to my files so that both of our
+      implementations worked together.
 
 ## Local Machine IP
 - [Baeldung: Get Local IP Address](https://www.baeldung.com/java-get-ip-address)
