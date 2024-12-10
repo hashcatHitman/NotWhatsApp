@@ -5,6 +5,8 @@ import Model.Crypto.EncryptionService;
 import Model.Crypto.KeyManager;
 import Model.Crypto.KeyManagerShiftDH;
 import Model.Crypto.ShiftCipher;
+import Model.Observer.MessageNotification;
+import View.TextChannel;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -17,7 +19,7 @@ import java.net.Socket;
  * </p>
  *
  * @author Sam K
- * @version 12/9/2024
+ * @version 12/7/2024
  */
 public class Client implements Runnable {
 // Attributes
@@ -42,7 +44,6 @@ public class Client implements Runnable {
      * </p>
      */
     private final String username;
-
 // Getters and Setters
 
     /**
@@ -126,11 +127,22 @@ public class Client implements Runnable {
                     new EncryptionService(myKeys, cipher, in, out);
             encryptionService.establishSecret();
 
+            //creating textchannel object
+            TextChannel textChannel = new TextChannel(this.getUsername());
+            textChannel.setVisible(true);
             // Create a listener and relay
             NetworkListener listener =
-                    new NetworkListener(in, encryptionService);
+                    new NetworkListener(in, encryptionService,
+                                        textChannel.getMessage());
             NetworkRelay relay = new NetworkRelay(encryptionService, out,
                                                   this.getUsername());
+
+            //let listener update the GUI using observer pattern
+            listener.setMessageNotification(textChannel.getMessage());
+
+            //Allows message controller (using TextChannel) to send messages
+            // uisng a relay approach
+            textChannel.setNetworkRelay(relay);
 
             // Spawn listener and relay Threads
             Thread listeningThread = new Thread(listener, Thread.currentThread()

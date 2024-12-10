@@ -1,8 +1,5 @@
 package Control;
 
-import Client.Client;
-import Server.Server;
-import View.ServerView;
 import View.StartView;
 
 import java.security.NoSuchAlgorithmException;

@@ -1,18 +1,20 @@
 package View;
 
+import Client.*;
 import Control.MessageController;
+import Model.Message;
 import Model.Observer.MessageNotification;
 import Model.Observer.User;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 
 import javax.swing.text.Style;
@@ -42,25 +44,42 @@ public class TextChannel extends JFrame {
     // Declare the components of the GUI
     JTextPane messageArea;
 
-    JTextField messageField;
+    static JTextField messageField;
 
     public JButton sendButton;
 
-    MessageNotification messageNotification;
+    static MessageNotification messageNotification;
 
     User user;
+
+    public TextChannel getTextChannel() {
+        return textChannel;
+    }
+
+    TextChannel textChannel;
+
+    //network relay field
+    private NetworkRelay networkRelay;
+
+    //setter for networkRelay
+    public void setNetworkRelay(NetworkRelay networkRelay) {
+        this.networkRelay = networkRelay;
+    }
+
+    public NetworkRelay getNetworkRelay() {
+        return networkRelay;
+    }
 
     /**
      * The constructor for the chat GUI. Creates the JFrame, adds and styles the
      * components.
      *
-     * @param username Pass in the username so the client will be subscribed
-     *                 to messages
+     * @param username Pass in the username so the client will be subscribed to
+     *                 messages
      */
-    public TextChannel(String username) {
-
+    public TextChannel(String username) throws BadLocationException {
         super("¬WhatsApp");
-
+        this.textChannel = this;
         /**
          * Create the user and message objects here so that the user is not
          * created on each button send.
@@ -68,7 +87,9 @@ public class TextChannel extends JFrame {
         this.user = new User(username, this);
         messageNotification = new MessageNotification();
         messageNotification.addClient(getUser());
-
+        // Display the chat window
+        SwingUtilities.invokeLater(() -> this.setVisible(true));
+//        ConnectCommand.getClient().run();
         // Create the MessageController that hold the button action listeners.
         MessageController messageController = new MessageController(this);
         JPanel chatPanel = new JPanel();
@@ -77,9 +98,9 @@ public class TextChannel extends JFrame {
         GroupLayout layout = new GroupLayout(chatPanel);
         chatPanel.setLayout(layout);
 
-        // Display the number of users online
-        JLabel numUsers =
-                new JLabel("Users: " + messageNotification.getNumUsers());
+//        // Display the number of users online
+//        JLabel numUsers =
+//                new JLabel("Users: " + messageNotification.getNumUsers());
 
         messageArea = new JTextPane();
 
@@ -87,6 +108,11 @@ public class TextChannel extends JFrame {
         JScrollPane scrollPane = new JScrollPane(messageArea);
         messageArea.setEditable(false);
         messageArea.setPreferredSize(new Dimension(200, 200));
+        messageArea.getDocument()
+                   .insertString(messageArea.getDocument().getLength(),
+                                 "Hello " + getUser().getUsername() + "!\n " +
+                                 "Try starting a conversation by sending a " +
+                                 "message.\n", null);
 
         messageField = new JTextField();
         messageField.requestFocus();
@@ -98,19 +124,18 @@ public class TextChannel extends JFrame {
         // Define horizontal layout - both horizontal and vertical are required.
         layout.setHorizontalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                      .addComponent(numUsers).addComponent(scrollPane).addGroup(
+                      .addComponent(scrollPane).addGroup(
                               layout.createSequentialGroup()
                                     .addComponent(messageField)
                                     .addComponent(sendButton)));
 
         // Define vertical layout
         layout.setVerticalGroup(
-                layout.createSequentialGroup().addComponent(numUsers)
-                      .addComponent(scrollPane).addGroup(
-                              layout.createParallelGroup(
-                                            GroupLayout.Alignment.BASELINE)
-                                    .addComponent(messageField)
-                                    .addComponent(sendButton)));
+                layout.createSequentialGroup().addComponent(scrollPane)
+                      .addGroup(layout.createParallelGroup(
+                                              GroupLayout.Alignment.BASELINE)
+                                      .addComponent(messageField)
+                                      .addComponent(sendButton)));
 
         // Finalize frame
         add(chatPanel);
@@ -126,13 +151,12 @@ public class TextChannel extends JFrame {
      * Adds the users' message to the JTextPane with styles
      *
      * @param message The users' message
-     * @param string
      * @param color   The color of the users username
      *
      * @throws BadLocationException Needed for handling style document
      *                              exceptions
      */
-    public void addMessage(String message, Color color)
+    public void addMessage(Message message, Color color, String username)
     throws BadLocationException {
         Style usernameStyle =
                 messageArea.getStyledDocument().addStyle("usernameStyle", null);
@@ -141,19 +165,21 @@ public class TextChannel extends JFrame {
         Style messageStyle =
                 messageArea.getStyledDocument().addStyle("messageStyle", null);
         // Add the username and message to the document (JTextPane)
+
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
-                                 user.getUsername() + ": ", usernameStyle);
+                                 message.getSender() + ": ", usernameStyle);
+
         messageArea.getDocument()
                    .insertString(messageArea.getDocument().getLength(),
-                                 message + "\n", messageStyle);
+                                 message.toString() + "\n", messageStyle);
 
     }
 
     /**
      * Getters and Setters
      */
-    public String getMessageField() {
+    public static String getMessageField() {
         return messageField.getText();
     }
 
@@ -165,7 +191,7 @@ public class TextChannel extends JFrame {
         return user;
     }
 
-    public MessageNotification getMessage() {
+    public static MessageNotification getMessage() {
         return messageNotification;
     }
 

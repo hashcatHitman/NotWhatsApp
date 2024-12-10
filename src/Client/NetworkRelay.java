@@ -38,6 +38,16 @@ public class NetworkRelay implements Runnable {
      */
     private final String username;
 
+    //store current message
+    private Message currentMessage;
+
+    //setter for current message and this notifies the relay thread it got a
+    //message to send
+    public synchronized void sendCurrentMessage(Message message) {
+        this.currentMessage = message;
+        notify(); //notify the relay thread that it has a message to send
+    }
+
 // Getters and Setters
 
     /**
@@ -107,27 +117,31 @@ public class NetworkRelay implements Runnable {
     @Override
     public void run() {
         try {
-            // Scanner for user input
-            Scanner scanner = new Scanner(System.in);
-
+            //loop for sending messages
             while (true) {
-                // Prompt user for input
-                System.out.print("Enter message (type 'exit' to quit):\t");
-                String userInput = scanner.nextLine();
+                //Wait until we have a currentMessage to send (notified from setCurrentMessage())
+                synchronized (this) { //syncrhonized does not allow multiple threads to access the same block of code
+                    while (currentMessage == null) {
+                        wait(); // Wait until setCurrentMessage() is called
+                    }
+                }
 
-                // Create a new Message object with the user input
-                Message message = new Message(userInput, this.getUsername());
+                //create a copy of the current message to send
+                Message messageToSend = currentMessage;
+                currentMessage = null; // Reset current message for next
+                // time, so the thread waits for the next message, otherwise
+                // it will keep sending the same message
+
                 System.out.println(
                         Thread.currentThread().getName() + " wants to send:\t" +
-                        message);
+                        messageToSend);
 
                 // Encrypt it
                 Message encrypted =
-                        this.getEncryptionService().encrypt(message);
-                System.out.println(
-                        Thread.currentThread().getName() + " is sending " +
-                        "the message, but encrypted. It looks like:\t" +
-                        encrypted);
+                        this.getEncryptionService().encrypt(messageToSend);
+                System.out.println(Thread.currentThread().getName() +
+                                   " is sending the message (encrypted):\t" +
+                                   encrypted);
 
                 // Send it
                 this.getOut().writeObject(encrypted);

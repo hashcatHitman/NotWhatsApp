@@ -8,6 +8,7 @@ package Model.Observer;
 import Model.Message;
 import View.TextChannel;
 
+import javax.swing.SwingUtilities;
 import javax.swing.text.BadLocationException;
 import java.awt.Color;
 import java.util.Random;
@@ -25,7 +26,7 @@ public class User implements nwaClient {
      * appear as, and sets the location to receive notifications as the chat
      * windows JFame.
      *
-     * @param username Sets the users' username
+     * @param username    Sets the users' username
      * @param textChannel Sets the location to receive notifications
      */
 
@@ -66,13 +67,24 @@ public class User implements nwaClient {
      * user's username, assigned color, and their message.
      *
      * @throws BadLocationException Needed for handling style document styling
-     * exceptions in addMessage() in TextChannel
+     *                              exceptions in addMessage() in TextChannel
      */
     @Override
-    public void receiveMessage( Message message, Color color)
+    public void receiveMessage(Message message, Color color)
     throws BadLocationException {
-        textChannel.addMessage(message.toString(), getColor());
-        System.out.println(message.toString());
+        SwingUtilities.invokeLater(() -> {
+            try {
+                if (!message.getSender().equals(username)) {
+                    textChannel.addMessage(message, getColor(), username);
+                } else {
+                    textChannel.addMessage(message, Color.BLACK, username);
+                }
+            } catch (BadLocationException e) {
+                e.printStackTrace();
+            }
+        });
+//        textChannel.addMessage(message.toString(), getColor());
+//        System.out.println(message.toString());
     }
 
 }
