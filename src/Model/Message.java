@@ -2,6 +2,7 @@ package Model;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <p>
@@ -23,7 +24,7 @@ public class Message implements Serializable, Cloneable {
      * </p>
      */
     @Serial
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     /**
      * <p>
@@ -46,20 +47,41 @@ public class Message implements Serializable, Cloneable {
      *                             .getOffset(Instant.now());
      * DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
      * LocalDateTime dateTime = LocalDateTime.ofEpochSecond(time, 0, offset);
-     * String result = formatter.format(dateTime);
-     * }
+     * String result = formatter.format(dateTime);}
      * </p>
      */
     private final long unixTimeStamp;
 
     /**
      * <p>
-     * The Message content, as a String.
+     * The Message content, as an array of bytes.
      * </p>
      */
-    private String text;
+    private byte[] content;
 
 // Getters and Setters
+
+    /**
+     * <p>
+     * Gets the Message content, as an array of bytes.
+     * </p>
+     *
+     * @return The Message content, as an array of bytes.
+     */
+    public byte[] getContent() {
+        return this.content;
+    }
+
+    /**
+     * <p>
+     * Sets the Message content to the given array of bytes.
+     * </p>
+     *
+     * @param content The array of bytes to set as the content of this Message.
+     */
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
 
     /**
      * <p>
@@ -80,7 +102,7 @@ public class Message implements Serializable, Cloneable {
      * @return The Message content, as a String.
      */
     public String getText() {
-        return this.text;
+        return new String(this.getContent(), StandardCharsets.UTF_8);
     }
 
     /**
@@ -91,7 +113,7 @@ public class Message implements Serializable, Cloneable {
      * @param text The String to set as the content of this Message.
      */
     public void setText(String text) {
-        this.text = text;
+        this.setContent(text.getBytes(StandardCharsets.UTF_8));
     }
 
     /**

@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.Arrays;
 
@@ -20,7 +18,7 @@ import java.util.Arrays;
  * </p>
  *
  * @author Sam K
- * @version 12/7/2024
+ * @version 12/9/2024
  */
 public class EncryptionService {
 // Attributes
@@ -231,47 +229,55 @@ public class EncryptionService {
      * @param message The Message to decrypt.
      *
      * @return A decrypted clone of the original Message.
-     *
-     * @throws NoSuchAlgorithmException If no Provider supports an
-     *                                  implementation for one or more of the
-     *                                  specified algorithms.
-     * @throws InvalidKeyException      If the found PublicKey is inappropriate
-     *                                  for the underlying key agreement, e. g.,
-     *                                  is of the wrong type or has an
-     *                                  incompatible algorithm type.
      */
-    public Message decrypt(Message message)
-    throws NoSuchAlgorithmException, InvalidKeyException {
+    public Message decrypt(Message message) {
         // Clone the input
         Message clone = message.clone();
 
         // Start building a debug log
         StringBuilder log = new StringBuilder();
-        log.append(Thread.currentThread().getName()).append("\n\tKeyAB:\t")
-           .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
-           .append("\n\tKey?S:\t")
-           .append(this.getMyKeys().getSharedKey(this.getServerKey())[0])
-           .append("\n\tCiphertext:\t").append(clone);
+        try {
+            log.append(Thread.currentThread().getName()).append("\n\tKeyAB:\t")
+               .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
+               .append("\n\tKey?S:\t")
+               .append(this.getMyKeys().getSharedKey(this.getServerKey())[0])
+               .append("\n\tCiphertext:\t").append(clone);
 
-        // Decrypt with the Client-Server key first and log
-        byte[] half;
-        half = this.getCipher()
-                   .decrypt(clone.getText().getBytes(StandardCharsets.UTF_8),
-                            this.getMyKeys().getSharedKey(this.getServerKey()));
-        log.append("\n\tDecrypted with Key?S:\t")
-           .append(new String(half, StandardCharsets.UTF_8));
+            // Decrypt with the Client-Server key first and log
+            /*
+            @formatter:off
+             */
+            byte[] half = this.getCipher()
+                              .decrypt(clone.getContent(),
+                                       this.getMyKeys()
+                                           .getSharedKey(
+                                                   this.getServerKey()));
+            /*
+            @formatter:on
+             */
+            log.append("\n\tDecrypted with Key?S:\t")
+               .append(new String(half, StandardCharsets.UTF_8));
 
-        // Decrypt the result with the Client-Client key and log
-        byte[] clear;
-        clear = this.getCipher().decrypt(half, this.getMyKeys().getSharedKey(
-                this.getClientKey()));
-        log.append("\n\tDecrypted with KeyAB:\t")
-           .append(new String(clear, StandardCharsets.UTF_8)).append("\n");
+            // Decrypt the result with the Client-Client key and log
+            /*
+            @formatter:off
+             */
+            byte[] clear = this.getCipher()
+                               .decrypt(half, this.getMyKeys()
+                                                  .getSharedKey(
+                                                          this.getClientKey()));
+            /*
+            @formatter:on
+             */
+            log.append("\n\tDecrypted with KeyAB:\t")
+               .append(new String(clear, StandardCharsets.UTF_8)).append("\n");
 
-        // Print the log, update the text in the clone, and return the clone
-        System.out.println(log);
-        String cleartext = new String(clear, StandardCharsets.UTF_8);
-        clone.setText(cleartext);
+            // Print the log, update the text in the clone, and return the clone
+            System.out.println(log);
+            clone.setContent(clear);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
         return clone;
     }
 
@@ -283,37 +289,39 @@ public class EncryptionService {
      * @param message The Message to decrypt.
      *
      * @return A decrypted clone of the original Message.
-     *
-     * @throws NoSuchAlgorithmException If no Provider supports an
-     *                                  implementation for one or more of the
-     *                                  specified algorithms.
-     * @throws InvalidKeyException      If the found PublicKey is inappropriate
-     *                                  for the underlying key agreement, e. g.,
-     *                                  is of the wrong type or has an
-     *                                  incompatible algorithm type.
      */
-    public Message decryptServer(Message message)
-    throws NoSuchAlgorithmException, InvalidKeyException {
+    public Message decryptServer(Message message) {
         // Clone the input
         Message clone = message.clone();
+        try {
 
-        // Start building a debug log
-        StringBuilder log = new StringBuilder();
-        log.append(Thread.currentThread().getName()).append("\n\tKey?S:\t")
-           .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
-           .append("\n\tCiphertext:\t").append(clone);
+            // Start building a debug log
+            StringBuilder log = new StringBuilder();
+            log.append(Thread.currentThread().getName()).append("\n\tKey?S:\t")
+               .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
+               .append("\n\tCiphertext:\t").append(clone);
 
-        // Decrypt with the Client-Server key and log
-        byte[] clear = this.getCipher().decrypt(
-                clone.getText().getBytes(StandardCharsets.UTF_8),
-                this.getMyKeys().getSharedKey(this.getClientKey()));
-        log.append("\n\tDecrypted with Key?S:\t")
-           .append(new String(clear, StandardCharsets.UTF_8));
+            // Decrypt with the Client-Server key and log
+            /*
+            @formatter:off
+             */
+            byte[] clear = this.getCipher()
+                               .decrypt(clone.getContent(),
+                                        this.getMyKeys()
+                                            .getSharedKey(
+                                                    this.getClientKey()));
+            /*
+            @formatter:on
+             */
+            log.append("\n\tDecrypted with Key?S:\t")
+               .append(new String(clear, StandardCharsets.UTF_8));
 
-        // Print the log, update the text in the clone, and return the clone
-        System.out.println(log);
-        String cleartext = new String(clear, StandardCharsets.UTF_8);
-        clone.setText(cleartext);
+            // Print the log, update the text in the clone, and return the clone
+            System.out.println(log);
+            clone.setContent(clear);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
         return clone;
     }
 
@@ -325,47 +333,56 @@ public class EncryptionService {
      * @param message The Message to encrypt.
      *
      * @return An encrypted clone of the original Message.
-     *
-     * @throws NoSuchAlgorithmException If no Provider supports an
-     *                                  implementation for one or more of the
-     *                                  specified algorithms.
-     * @throws InvalidKeyException      If the found PublicKey is inappropriate
-     *                                  for the underlying key agreement, e. g.,
-     *                                  is of the wrong type or has an
-     *                                  incompatible algorithm type.
      */
-    public Message encrypt(Message message)
-    throws NoSuchAlgorithmException, InvalidKeyException {
+    public Message encrypt(Message message) {
         // Clone the input
         Message clone = message.clone();
+        try {
+            // Start building a debug log
+            StringBuilder log = new StringBuilder();
+            log.append(Thread.currentThread().getName()).append("\n\tKeyAB:\t")
+               .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
+               .append("\n\tKey?S:\t")
+               .append(this.getMyKeys().getSharedKey(this.getServerKey())[0])
+               .append("\n\tCleartext:\t").append(clone);
 
-        // Start building a debug log
-        StringBuilder log = new StringBuilder();
-        log.append(Thread.currentThread().getName()).append("\n\tKeyAB:\t")
-           .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
-           .append("\n\tKey?S:\t")
-           .append(this.getMyKeys().getSharedKey(this.getServerKey())[0])
-           .append("\n\tCleartext:\t").append(clone);
+            // Encrypt with the Client-Client key and log
+            /*
+            @formatter:off
+             */
+            byte[] half = this.getCipher()
+                              .encrypt(clone.getContent(),
+                                       this.getMyKeys()
+                                           .getSharedKey(
+                                                   this.getClientKey()));
+            /*
+            @formatter:on
+             */
+            log.append("\n\tEncrypted with KeyAB:\t")
+               .append(new String(half, StandardCharsets.UTF_8));
 
-        // Encrypt with the Client-Client key and log
-        byte[] half;
-        half = this.getCipher()
-                   .encrypt(clone.getText().getBytes(StandardCharsets.UTF_8),
-                            this.getMyKeys().getSharedKey(this.getClientKey()));
-        log.append("\n\tEncrypted with KeyAB:\t")
-           .append(new String(half, StandardCharsets.UTF_8));
+            // Encrypt with the Client-Server key and log
+            /*
+            @formatter:off
+             */
+            byte[] ciphered = this.getCipher()
+                                  .encrypt(half,
+                                           this.getMyKeys()
+                                               .getSharedKey(
+                                                       this.getServerKey()));
+            /*
+            @formatter:on
+             */
+            log.append("\n\tEncrypted with Key?S:\t")
+               .append(new String(ciphered, StandardCharsets.UTF_8))
+               .append("\n");
 
-        // Encrypt with the Client-Server key and log
-        byte[] ciphered;
-        ciphered = this.getCipher().encrypt(half, this.getMyKeys().getSharedKey(
-                this.getServerKey()));
-        log.append("\n\tEncrypted with Key?S:\t")
-           .append(new String(ciphered, StandardCharsets.UTF_8)).append("\n");
-
-        // Print the log, update the text in the clone, and return the clone
-        System.out.println(log);
-        String ciphertext = new String(ciphered, StandardCharsets.UTF_8);
-        clone.setText(ciphertext);
+            // Print the log, update the text in the clone, and return the clone
+            System.out.println(log);
+            clone.setContent(ciphered);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
         return clone;
     }
 
@@ -377,37 +394,39 @@ public class EncryptionService {
      * @param message The Message to encrypt.
      *
      * @return An encrypted clone of the original Message.
-     *
-     * @throws NoSuchAlgorithmException If no Provider supports an
-     *                                  implementation for one or more of the
-     *                                  specified algorithms.
-     * @throws InvalidKeyException      If the found PublicKey is inappropriate
-     *                                  for the underlying key agreement, e. g.,
-     *                                  is of the wrong type or has an
-     *                                  incompatible algorithm type.
      */
-    public Message encryptServer(Message message)
-    throws NoSuchAlgorithmException, InvalidKeyException {
+    public Message encryptServer(Message message) {
         // Clone the input
         Message clone = message.clone();
+        try {
+            // Start building a debug log
+            StringBuilder log = new StringBuilder();
+            log.append(Thread.currentThread().getName()).append("\n\tKey?S:\t")
+               .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
+               .append("\n\tCleartext:\t").append(clone);
 
-        // Start building a debug log
-        StringBuilder log = new StringBuilder();
-        log.append(Thread.currentThread().getName()).append("\n\tKey?S:\t")
-           .append(this.getMyKeys().getSharedKey(this.getClientKey())[0])
-           .append("\n\tCleartext:\t").append(clone);
+            // Encrypt with the Client-Server key and log
+            /*
+            @formatter:off
+             */
+            byte[] ciphered = this.getCipher()
+                                  .encrypt(clone.getContent(),
+                                           this.getMyKeys()
+                                               .getSharedKey(
+                                                       this.getClientKey()));
+            /*
+            @formatter:on
+             */
+            log.append("\n\tEncrypted with Key?S:\t")
+               .append(new String(ciphered, StandardCharsets.UTF_8))
+               .append("\n");
 
-        // Encrypt with the Client-Server key and log
-        byte[] ciphered = this.getCipher().encrypt(
-                clone.getText().getBytes(StandardCharsets.UTF_8),
-                this.getMyKeys().getSharedKey(this.getClientKey()));
-        log.append("\n\tEncrypted with Key?S:\t")
-           .append(new String(ciphered, StandardCharsets.UTF_8)).append("\n");
-
-        // Print the log, update the text in the clone, and return the clone
-        System.out.println(log);
-        String ciphertext = new String(ciphered, StandardCharsets.UTF_8);
-        clone.setText(ciphertext);
+            // Print the log, update the text in the clone, and return the clone
+            System.out.println(log);
+            clone.setContent(ciphered);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
         return clone;
     }
 

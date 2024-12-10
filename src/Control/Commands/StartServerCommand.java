@@ -5,6 +5,7 @@ import Server.Server;
 import Server.GetIP;
 
 import javax.swing.JOptionPane;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException; //to handle server errors
 
 /*
@@ -42,7 +43,7 @@ public class StartServerCommand implements Command {
             JOptionPane.showMessageDialog(null,
                                           "Server started.\nIP: " + localIP + "\nPort: " + port);
 
-        } catch (NoSuchAlgorithmException e) { //to handle server erros
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException e) { //to handle server erros
             e.printStackTrace();
         }
     }

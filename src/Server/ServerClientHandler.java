@@ -1,8 +1,8 @@
 package Server;
 
+import Model.Crypto.AES128;
 import Model.Crypto.EncryptionService;
 import Model.Crypto.KeyManager;
-import Model.Crypto.ShiftCipher;
 import Model.Message;
 import Model.Utility.TabInserter;
 
@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.concurrent.BlockingQueue;
 
@@ -165,6 +163,9 @@ public class ServerClientHandler extends Thread {
      * @param sendQueue    The BlockingQueue this ServerClientHandler uses to
      *                     send PublicKeys to other ServerClientHandlers.
      * @param server       The Server that spawned this ServerClientHandler.
+     *
+     * @throws IOException If an I/O error occurs while reading/writing the
+     *                     stream headers.
      */
     public ServerClientHandler(String name, Socket clientSocket,
                                KeyManager keyManager,
@@ -178,8 +179,8 @@ public class ServerClientHandler extends Thread {
         this.in = new ObjectInputStream(clientSocket.getInputStream());
         this.out = new ObjectOutputStream(clientSocket.getOutputStream());
         this.encryptionService =
-                new EncryptionService(keyManager, new ShiftCipher(),
-                                      this.getIn(), this.getOut());
+                new EncryptionService(keyManager, new AES128(), this.getIn(),
+                                      this.getOut());
         System.out.println(
                 Thread.currentThread().getName() + " connected to client:\t" +
                 clientSocket.getInetAddress());
@@ -261,18 +262,9 @@ public class ServerClientHandler extends Thread {
      *
      * @param message The Message being sent.
      *
-     * @throws IOException              Any exception thrown by the underlying
-     *                                  OutputStream.
-     * @throws NoSuchAlgorithmException If no Provider supports an
-     *                                  implementation for one or more of the
-     *                                  underlying specified algorithms.
-     * @throws InvalidKeyException      If the PublicKey previously given to
-     *                                  this ServerClientHandler is
-     *                                  inappropriate for the underlying
-     *                                  KeyAgreement.
+     * @throws IOException Any exception thrown by the underlying OutputStream.
      */
-    public void send(Message message)
-    throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    public void send(Message message) throws IOException {
         System.out.println(Thread.currentThread().getName() +
                            " got from another handler:\t" + message);
 

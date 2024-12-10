@@ -1,12 +1,12 @@
 package Server;
 
 import Model.Crypto.KeyManager;
-import Model.Crypto.KeyManagerShiftDH;
+import Model.Crypto.KeyManagerAES128ECDH;
 import Model.Message;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.security.InvalidKeyException;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.util.HashMap;
@@ -119,12 +119,18 @@ public class Server implements Runnable {
      *
      * @param port The port number to open a Server on, as an integer.
      *
-     * @throws NoSuchAlgorithmException If no Provider supports a
-     *                                  KeyPairGeneratorSpi implementation for
-     *                                  the default specified algorithm.
+     * @throws NoSuchAlgorithmException           If no Provider supports a
+     *                                            KeyPairGeneratorSpi
+     *                                            implementation for the default
+     *                                            specified algorithm.
+     * @throws InvalidAlgorithmParameterException If the given parameters are
+     *                                            inappropriate for the
+     *                                            underlying key pair
+     *                                            generator.
      */
-    private Server(int port) throws NoSuchAlgorithmException {
-        this(port, new KeyManagerShiftDH());
+    private Server(int port)
+    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+        this(port, new KeyManagerAES128ECDH());
     }
 
 // Methods
@@ -138,11 +144,17 @@ public class Server implements Runnable {
      *
      * @return The Singleton instance of the Server.
      *
-     * @throws NoSuchAlgorithmException If no Provider supports a
-     *                                  KeyPairGeneratorSpi implementation for
-     *                                  the default specified algorithm.
+     * @throws NoSuchAlgorithmException           If no Provider supports a
+     *                                            KeyPairGeneratorSpi
+     *                                            implementation for the default
+     *                                            specified algorithm.
+     * @throws InvalidAlgorithmParameterException If the given parameters are
+     *                                            inappropriate for the
+     *                                            underlying key pair
+     *                                            generator.
      */
-    public static Server getInstance(int port) throws NoSuchAlgorithmException {
+    public static Server getInstance(int port)
+    throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
         // First check
         if (Server.instance == null) {
             // Synchronize on the class
@@ -218,18 +230,9 @@ public class Server implements Runnable {
      * @param sender  The name of the ServerClientHandler that send the
      *                Message.
      *
-     * @throws IOException              Any exception thrown by the underlying
-     *                                  OutputStream.
-     * @throws NoSuchAlgorithmException If no Provider supports an
-     *                                  implementation for one or more of the
-     *                                  underlying specified algorithms.
-     * @throws InvalidKeyException      If the PublicKey previously given to a
-     *                                  receiving ServerClientHandler is
-     *                                  inappropriate for the underlying
-     *                                  KeyAgreement.
+     * @throws IOException Any exception thrown by the underlying OutputStream.
      */
-    public void send(Message message, String sender)
-    throws IOException, NoSuchAlgorithmException, InvalidKeyException {
+    public void send(Message message, String sender) throws IOException {
         System.out.println(
                 Thread.currentThread().getName() + " got from " + sender +
                 ":\t" + message);

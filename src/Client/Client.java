@@ -1,10 +1,10 @@
 package Client;
 
+import Model.Crypto.AES128;
 import Model.Crypto.Cipher;
 import Model.Crypto.EncryptionService;
 import Model.Crypto.KeyManager;
-import Model.Crypto.KeyManagerShiftDH;
-import Model.Crypto.ShiftCipher;
+import Model.Crypto.KeyManagerAES128ECDH;
 import View.TextChannel;
 
 import java.io.ObjectInputStream;
@@ -122,8 +122,8 @@ public class Client implements Runnable {
                     new ObjectInputStream(socket.getInputStream());
 
             // Set up Cryptography and establish shared secrets
-            KeyManager myKeys = new KeyManagerShiftDH();
-            Cipher cipher = new ShiftCipher();
+            KeyManager myKeys = new KeyManagerAES128ECDH();
+            Cipher cipher = new AES128();
             EncryptionService encryptionService =
                     new EncryptionService(myKeys, cipher, in, out);
             encryptionService.establishSecret();
@@ -134,12 +134,12 @@ public class Client implements Runnable {
             // Create a listener and relay
             NetworkListener listener =
                     new NetworkListener(in, encryptionService,
-                                        textChannel.getMessage());
+                                        TextChannel.getMessage());
             NetworkRelay relay = new NetworkRelay(encryptionService, out,
                                                   this.getUsername());
 
             // Let listener update the GUI using the observer pattern
-            listener.setMessageNotification(textChannel.getMessage());
+            listener.setMessageNotification(TextChannel.getMessage());
 
             // Allows message controller (using TextChannel) to send messages
             // using a relay approach
