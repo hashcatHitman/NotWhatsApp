@@ -12,6 +12,7 @@ import java.util.Scanner;
  * </p>
  *
  * @author Sam K
+ * @author Ryan F
  * @version 12/9/2024
  */
 public class NetworkRelay implements Runnable {

@@ -156,7 +156,7 @@ public class TextChannel extends JFrame {
      * @throws BadLocationException Needed for handling style document
      *                              exceptions
      */
-    public void addMessage(Message message, Color color, String username)
+    public void addMessage(Message message, Color color)
     throws BadLocationException {
         Style usernameStyle =
                 messageArea.getStyledDocument().addStyle("usernameStyle", null);

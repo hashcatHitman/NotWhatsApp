@@ -10,6 +10,7 @@ import java.util.List;
  * MessageNotification.java The Subject of the observer
  *
  * @author Paige Grimes
+ * @author Ryan F
  */
 public class MessageNotification {
 
