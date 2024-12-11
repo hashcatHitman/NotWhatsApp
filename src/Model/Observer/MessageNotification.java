@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class MessageNotification {
 
-    private final List<nwaClient> users;
+    private final List<IClient> users;
 
     /**
      * Create the MessageNotification object and initialize the List to hold the
@@ -50,7 +50,7 @@ public class MessageNotification {
     public void sendMessage(Message message) throws BadLocationException {
         // For each active user on the server, call receiveMessage() to notify
         // them of a new message
-        for (nwaClient user : users) {
+        for (IClient user : users) {
             user.receiveMessage(message, user.getColor());
         }
     }

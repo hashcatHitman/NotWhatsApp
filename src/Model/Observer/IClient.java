@@ -6,12 +6,12 @@ import javax.swing.text.BadLocationException;
 import java.awt.Color;
 
 /**
- * nwaClient.java (NotWhatsApp Client)
+ * IClient.java (Liminal Client)
  * The interface for the observer class.
  *
  * @author Paige Grimes
  */
-public interface nwaClient {
+public interface IClient {
     String getUsername();
 
     Color getColor();

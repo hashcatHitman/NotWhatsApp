@@ -56,7 +56,7 @@ public class TextChannel extends JFrame {
      *                 messages
      */
     public TextChannel(String username) throws BadLocationException {
-        super("¬WhatsApp");
+        super("Liminal");
         this.textChannel = this;
         /**
          * Create the user and message objects here so that the user is not

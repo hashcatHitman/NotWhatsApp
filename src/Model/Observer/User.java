@@ -5,9 +5,9 @@ package Model.Observer;
  * username and get a random color assigned to the font of their name which will
  * display the same for other clients on the server. The user will know which
  * message they sent because their username will be in plain text, font color
- * black. The User class implements the interface nwaClient (NotWhatsApp client)
- * and defines the receiveNotification() method which sends the Message object
- * to the TextChannel GUI and the users corresponding color.
+ * black. The User class implements the interface IClient and defines the
+ * receiveNotification() method which sends the Message object to the
+ * TextChannel GUI and the users corresponding color.
  * </p>
  *
  * @author Paige
@@ -22,7 +22,7 @@ import javax.swing.text.BadLocationException;
 import java.awt.Color;
 import java.util.Random;
 
-public class User implements nwaClient {
+public class User implements IClient {
 
     private final String username;
 
@@ -109,4 +109,3 @@ public class User implements nwaClient {
     }
 
 }
-
